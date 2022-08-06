@@ -1,6 +1,7 @@
 const { google } = require('googleapis');
 const path = require('path');
 const fs = require('fs');
+const { type } = require('os');
 
 const CLIENT_ID = '153919299508-4r1opfaioart4vhhknsn0m3m25lg153c.apps.googleusercontent.com';
 const CLIENT_SECRET = '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';
@@ -80,10 +81,13 @@ async function listFile2() {
     try {
         const res = await drive.files.list({
          // q: 'mimeType=\'application/vnd.google-apps.folder\'',
-          fields: 'nextPageToken, files(id, name)',
-          spaces: 'drive',
-          pageSize: 10,
-          fileId: '1DuDuSFS3ic_HbR7NX6628f8io2W8EQ4f',
+         fields: 'nextPageToken, files(id, name)',
+        // spaces: 'drive',
+         pageSize: 10,
+         // q: '1PUYXxOHOmAo5nMxWtTI9xaWsck_Acfbq' in parents,
+         //    q: 'fullText contains =\'battesimi\'',
+         q: `'15jEbap2ZnGGIA0Txv5IBIlqwLFnRrE0y' in parents`
+         
         });
         Array.prototype.push.apply(files, res.files);
         res.data.files.forEach(function(file) {
@@ -109,4 +113,57 @@ async function listFile3() {
     }
 }
 
-listFile2()
+
+
+
+async function generatePublicUrl(){
+    try {
+        const fileId = '19bvOxWNrOwJVPJTUx1eZp0uAYfSBR04B';
+        await drive.permissions.create({
+            fileId: fileId,
+            requestBody:{
+                role:'reader',
+                type:'anyone'
+            }
+        })
+        const result = await drive.files.get({
+            fileId:fileId,
+            fields:'webViewLink,webContentLink'
+        })
+        console.log(result.data)
+    } catch (error) {
+        console.log(error.message) 
+    }
+}
+
+//listFile2()
+//generatePublicUrl()
+
+
+
+
+async function getIdPhotos() {
+    try {
+        const res = await drive.files.list({
+         // q: 'mimeType=\'application/vnd.google-apps.folder\'',
+         fields: 'nextPageToken, files(id, name)',
+        // spaces: 'drive',
+         pageSize: 495,
+         // q: '1PUYXxOHOmAo5nMxWtTI9xaWsck_Acfbq' in parents,
+         //    q: 'fullText contains =\'battesimi\'',
+         q: `'15jEbap2ZnGGIA0Txv5IBIlqwLFnRrE0y' in parents`
+         
+        });
+        Array.prototype.push.apply(files, res.files);
+        res.data.files.forEach(function(file) {
+          console.log('"',file.id,'",',);
+        });
+        return res.data.files;
+      } catch (err) {
+        // TODO(developer) - Handle error
+        throw err;
+      }
+}
+
+
+getIdPhotos()
