@@ -52,8 +52,8 @@ async function listFile() {
         drive.files.list({
             pageSize: 50,
             fields: 'nextPageToken, files(id, name)',
-            name : 'Enea Cericola-1.jpg',
-            mimeType : 'application/vnd.google-apps.folder',
+            name: 'Enea Cericola-1.jpg',
+            mimeType: 'application/vnd.google-apps.folder',
         }, (err, res) => {
             if (err) return console.log('The API returned an error: ' + err);
             const files = res.data.files;
@@ -80,24 +80,24 @@ const files = [];
 async function listFile2() {
     try {
         const res = await drive.files.list({
-         // q: 'mimeType=\'application/vnd.google-apps.folder\'',
-         fields: 'nextPageToken, files(id, name)',
-        // spaces: 'drive',
-         pageSize: 10,
-         // q: '1PUYXxOHOmAo5nMxWtTI9xaWsck_Acfbq' in parents,
-         //    q: 'fullText contains =\'battesimi\'',
-         q: `'15jEbap2ZnGGIA0Txv5IBIlqwLFnRrE0y' in parents`
-         
+            // q: 'mimeType=\'application/vnd.google-apps.folder\'',
+            fields: 'nextPageToken, files(id, name)',
+            // spaces: 'drive',
+            pageSize: 10,
+            // q: '1PUYXxOHOmAo5nMxWtTI9xaWsck_Acfbq' in parents,
+            //    q: 'fullText contains =\'battesimi\'',
+            q: `'15jEbap2ZnGGIA0Txv5IBIlqwLFnRrE0y' in parents`
+
         });
         Array.prototype.push.apply(files, res.files);
         res.data.files.forEach(function(file) {
-          console.log('Found file:', file.name, file.id);
+            console.log('Found file:', file.name, file.id);
         });
         return res.data.files;
-      } catch (err) {
+    } catch (err) {
         // TODO(developer) - Handle error
         throw err;
-      }
+    }
 }
 async function listFile3() {
     try {
@@ -116,23 +116,23 @@ async function listFile3() {
 
 
 
-async function generatePublicUrl(){
+async function generatePublicUrl() {
     try {
         const fileId = '19bvOxWNrOwJVPJTUx1eZp0uAYfSBR04B';
         await drive.permissions.create({
             fileId: fileId,
-            requestBody:{
-                role:'reader',
-                type:'anyone'
+            requestBody: {
+                role: 'reader',
+                type: 'anyone'
             }
         })
         const result = await drive.files.get({
-            fileId:fileId,
-            fields:'webViewLink,webContentLink'
+            fileId: fileId,
+            fields: 'webViewLink,webContentLink'
         })
         console.log(result.data)
     } catch (error) {
-        console.log(error.message) 
+        console.log(error.message)
     }
 }
 
@@ -145,24 +145,26 @@ async function generatePublicUrl(){
 async function getIdPhotos() {
     try {
         const res = await drive.files.list({
-         // q: 'mimeType=\'application/vnd.google-apps.folder\'',
-         fields: 'nextPageToken, files(id, name)',
-        // spaces: 'drive',
-         pageSize: 495,
-         // q: '1PUYXxOHOmAo5nMxWtTI9xaWsck_Acfbq' in parents,
-         //    q: 'fullText contains =\'battesimi\'',
-         q: `'15jEbap2ZnGGIA0Txv5IBIlqwLFnRrE0y' in parents`
-         
+            // q: 'mimeType=\'application/vnd.google-apps.folder\'',
+            fields: 'nextPageToken, files(*)',
+            // spaces: 'drive',
+            pageSize: 1000,
+            // q: '1PUYXxOHOmAo5nMxWtTI9xaWsck_Acfbq' in parents,
+            //    q: 'fullText contains =\'battesimi\'',
+            q: `'1-banFibYBnPefgt8KyO8sFBJF392NFns' in parents`
+
         });
         Array.prototype.push.apply(files, res.files);
         res.data.files.forEach(function(file) {
-          console.log('"',file.id,'",',);
+            var x = '"' + file.id + '",';
+            console.log(x.replace(' ', ''));
+            //console.log(file);
         });
         return res.data.files;
-      } catch (err) {
+    } catch (err) {
         // TODO(developer) - Handle error
         throw err;
-      }
+    }
 }
 
 
